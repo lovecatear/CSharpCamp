@@ -1,0 +1,365 @@
+﻿@using Microsoft.AspNetCore.Http
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor user
+@{
+    string userId = user.HttpContext.Session.GetString("userId") ?? "Guest";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>一起露營吧  |  @ViewData["Title"]</title>
+
+    <!-- 字型的樣式 -->
+    <!-- Load fonts style after rendering the layout styles -->
+    <link href="~/css/style.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;500;700;900&display=swap" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" rel="preload" data-rocket-async="style" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <!--  CSS Files -->
+    <link href="~/css/bootstrap.min.css" rel="stylesheet">
+    <link href="~/css/bootstrap-icons.css" rel="stylesheet">
+    <!-- Template Main CSS File -->
+    @*<link href="~/Didi/css/fontawesome.css" rel="stylesheet" >*@
+    <link href="~/css/janecamp.css" rel="stylesheet">
+    <link href="~/css/janecampindex.css" rel="stylesheet">
+    <link href="~/css/janecampreserveindex.css" rel="stylesheet">
+    <link href="~/css/Search.css?v=0.1" rel="stylesheet">
+    @* 放不進去= =要加improtant，太多模板，bootstrap會卡 *@
+    <link rel="stylesheet" href="~/Didi/css/Layout.css?v=0.1">
+
+</head>
+
+<body>
+
+    <!-- ======= Header/Navbar ======= -->
+    <nav class="navbar navbar-default navbar-trans navbar-expand-lg fixed-top">
+        <div class="container home_all">
+            <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navbarDefault" aria-controls="navbarDefault" aria-expanded="false" aria-label="Toggle navigation">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            @*class="color-b"*@
+            <a class="navbar-brand text-brand justify-content-start T_fonts " href="@Url.Action("Index", "Home")" > 一起<span class="header_font1">露營</span><span>吧!</span></a>
+
+            <div class="navbar-collapse collapse justify-content-center" id="navbarDefault">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link title_bar bar_font" href="@Url.Action("Index", "Home")" id="test">首頁</a>
+                    </li>
+                    <!-- 育儒 ShoppingCart -->
+                    <li class="nav-item">
+                        <a class="nav-link title_bar bar_font" href="@Url.Action("Index", "CampProducts")">露營用品</a>
+                    </li>
+                    <!-- 家迪 Recipe -->
+                    <li class="nav-item">
+                        <a class="nav-link title_bar bar_font" href="@Url.Action("cust_Index", "Recipe")">食譜</a>
+                    </li>
+                    <!-- 昱娟  Camp Campreserve -->
+                    <li class="nav-item dropdown ">
+                        <a class="nav-link dropdown-toggle title_bar bar_font" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">露營場地</a>
+                        <div class="dropdown-menu title_bar">
+                            <a class="dropdown-item bar_font" href="@Url.Action("Index", "Camp")">露營場地介紹</a>
+                            <a class="dropdown-item bar_font" href="@Url.Action("Index", "Campreserve")">露營場地預約</a>
+                        </div>
+                    </li>
+                    <!-- 文杰 Employee -->
+                    <li class="nav-item">
+                        <a class="nav-link title_bar bar_font" href="@Url.Action("Index", "Employee")">管理員中心</a>
+                    </li>
+                    <!-- Sam 搜尋功能 (可搜尋版本) 圖示版 -->
+                    <li class="nav-item">
+                        <form method="get" action="/Search/Index" class="justify-content-center align-items-center search_icon icoin_size">
+                            <div class="search">
+                                <div class="icon" onclick="toggleSearchBar()"></div>
+                                <div class="input">
+                                    <input type="text" id="mysearch" name="SearchString" placeholder="找點什麼吧!">
+                                </div>
+                                <span class="clear" onclick="clearFunc()"></span>
+                            </div>
+                        </form>
+                    </li>
+                    @* 瑞秋的購物車 *@
+                    <li class="nav-item">
+                        <div class="shCart">
+                            <a class="nav-link" href="@Url.Action("Index", "PShopCart")">
+                                <i class="fas fa-cart-arrow-down text-dark" style="font-size: 1.5rem;margin-top:10px;"></i>
+                            </a>
+                        </div>
+                    </li>
+                    @* 會員登入&註冊 *@
+                    <li class="nav-item">
+                        <div class="dropdown " style="">
+                            <a class="nav-link dropdown-toggle title_bar" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="bi bi-person-fill" style="font-size: 1.75rem;"></i></a>
+                            <div class="dropdown-menu title_bar" style="margin-left:1vw;">
+                                @{
+                                    if (userId == "Guest")
+                                    {
+                                        <div class="Register_Part dropdown-item" style="margin-left:12px;">
+                                            <a class="nav-link text-dark" href="@Url.Action("Register", "Auth")">
+                                                <i class="fas fa-user-plus" style="font-size: 1.5rem"></i>註冊
+                                            </a>
+                                        </div>
+                                        <div class="Login_Part dropdown-item" style="margin-left: 12px;">
+                                            <a class="nav-link text-dark" href="@Url.Action("Login", "Auth")">
+                                                <i class="fas fa-sign-in-alt" style="font-size:1.5rem"></i>登入
+                                            </a>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="MemberCenter_Part" style="margin-left:12px;">
+                                            <a class="nav-link text-dark" href="@Url.Action("Index", "Auth")">
+                                                <i class="fa fa-fw fa-user" style="font-size: 2.2vmin"></i>會員中心
+                                            </a>
+                                        </div>
+                                        <div class="Logout_Part" style="margin-left:12px;">
+                                            <a class="nav-link text-dark" href="@Url.Action("Logout", "Auth")">
+                                                <i class="fas fa-sign-out-alt" style="font-size: 2.2vmin"></i>登出
+                                            </a>
+                                        </div>
+                                    }
+                                }
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- End Header/Navbar -->
+    <!-- Sam 搜尋功能 (可搜尋版本) 陽春版 -->
+    @*<form asp-controller="Search" asp-action="Index" method="get">
+            <input type="text" name="SearchString" />
+            <input type="submit" value="搜尋" />
+        </form>*@
+    @*<form method="get" action="/Search/Index">
+            <div class="d-lg-none flex-sm-fill mt-3 mb-4 col-7 col-sm-auto pr-3">
+                <div class="input-group">
+                    <input type="text" class="form-control" id="inputMobileSearch" placeholder="" name="SearchString">
+                    <div class="input-group-text">
+                        <i class="fa fa-fw fa-search"></i>
+                    </div>
+                </div>
+            </div>
+        </form>*@
+    <!-- 購物車 -->
+    @*<a class="align-self-center nav-icon position-relative text-decoration-none" href="@Url.Action("Index", "PShopCart")">
+            <i class="d-flex fas fa-cart-arrow-down text-dark mr-1" style="margin-left: 40px;font-size:1.1vw;margin:0;"></i>
+            <span class="position-absolute top-50 left-100 translate-middle badge rounded-pill bg-light text-dark"></span>
+        </a>*@
+
+    <!-- 會員 Identity 註冊/登入模組 -->
+
+
+
+    <main id="main">
+        <!-- ======= Intro Single ======= -->
+        @*<section class="intro-single">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12 col-lg-8">
+
+                        </div>
+                        <div class="col-md-12 col-lg-4">
+
+                        </div>
+                    </div>
+                </div>
+            </section>*@
+        <!-- End Intro Single-->
+        <!-- ======= Blog Single ======= -->
+        <div style="padding-top:10vh;">
+            @RenderBody()
+        </div>
+        <!-- End Blog Single-->
+    </main>
+
+    <!-- ======= Footer ======= -->
+    @*<section class="section-footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12 col-md-4">
+                        <div class="widget-a">
+                            <div class="w-header-a">
+                                <h3 class="w-title-a text-brand">關於我們</h3>
+                            </div>
+                            <div class="w-body-a">
+                                <p class="w-text-a color-text-a">
+                                    Enim minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip exea commodo consequat duis
+                                    sed aute irure.
+                                </p>
+                            </div>
+                            <div class="w-footer-a">
+                                <ul class="list-unstyled">
+                                    <li class="color-a">
+                                        <span class="color-text-a">
+                                            <i class="fas fa-envelope"></i>
+                                        </span> contact@example.com
+                                    </li>
+                                    <li class="color-a">
+                                        <span class="color-text-a"><i class="fas fa-phone"></i></span> +54 356 945234
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-4 section-md-t3">
+                        <div class="widget-a">
+                            <div class="w-header-a">
+                                <h3 class="w-title-a text-brand">露營用品</h3>
+                            </div>
+                            <div class="w-body-a">
+                                <div class="w-body-a">
+                                    <ul class="list-unstyled">
+                                        <li class="item-list-a">
+                                            <i class="bi bi-chevron-right"></i> <a href="#">Site Map</a>
+                                        </li>
+                                        <li class="item-list-a">
+                                            <i class="bi bi-chevron-right"></i> <a href="#">Legal</a>
+                                        </li>
+                                        <li class="item-list-a">
+                                            <i class="bi bi-chevron-right"></i> <a href="#">Agent Admin</a>
+                                        </li>
+                                        <li class="item-list-a">
+                                            <i class="bi bi-chevron-right"></i> <a href="#">Careers</a>
+                                        </li>
+                                        <li class="item-list-a">
+                                            <i class="bi bi-chevron-right"></i> <a href="#">Affiliate</a>
+                                        </li>
+                                        <li class="item-list-a">
+                                            <i class="bi bi-chevron-right"></i> <a href="#">Privacy Policy</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-4 section-md-t3">
+                        <div class="widget-a">
+                            <div class="w-header-a">
+                                <h3 class="w-title-a text-brand">露營場地預約</h3>
+                            </div>
+                            <div class="w-body-a">
+                                <ul class="list-unstyled">
+                                    <li class="item-list-a">
+                                        <i class="bi bi-chevron-right"></i> <a href="#">Venezuela</a>
+                                    </li>
+                                    <li class="item-list-a">
+                                        <i class="bi bi-chevron-right"></i> <a href="#">China</a>
+                                    </li>
+                                    <li class="item-list-a">
+                                        <i class="bi bi-chevron-right"></i> <a href="#">Hong Kong</a>
+                                    </li>
+                                    <li class="item-list-a">
+                                        <i class="bi bi-chevron-right"></i> <a href="#">Argentina</a>
+                                    </li>
+                                    <li class="item-list-a">
+                                        <i class="bi bi-chevron-right"></i> <a href="#">Singapore</a>
+                                    </li>
+                                    <li class="item-list-a">
+                                        <i class="bi bi-chevron-right"></i> <a href="#">Philippines</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <footer>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <nav class="nav-footer">
+                            <ul class="list-inline">
+                                <li class="list-inline-item">
+                                    <a href="#">Home</a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a href="#">About</a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a href="#">Property</a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a href="#">Blog</a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a href="#">Contact</a>
+                                </li>
+                            </ul>
+                        </nav>
+                        <div class="socials-a">
+                            <ul class="list-inline">
+                                <li class="list-inline-item">
+                                    <a href="#">
+                                        <i class="bi bi-facebook" aria-hidden="true"></i>
+                                    </a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a href="#">
+                                        <i class="bi bi-twitter" aria-hidden="true"></i>
+                                    </a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a href="#">
+                                        <i class="bi bi-instagram" aria-hidden="true"></i>
+                                    </a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a href="#">
+                                        <i class="bi bi-linkedin" aria-hidden="true"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="copyright-footer">
+                            <p class="copyright color-text-a">
+                                &copy; Copyright
+                                <span class="color-a">野性</span> All Rights Reserved.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>*@
+    <!-- End  Footer -->
+
+    <div id="preloader"></div>
+    <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    @*<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>*@
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <!-- Template Main JS File -->
+    <script src="~/js/main.js"></script>
+
+
+    <script src="~/Didi/js/jquery-1.11.0.min.js"></script>
+    <script src="~/Didi/js/jquery-migrate-1.2.1.min.js"></script>
+    <script src="~/Didi/js/bootstrap.bundle.min.js"></script>
+    <script src="~/Didi/js/templatemo.js"></script>
+    <script src="~/Didi/js/custom.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+
+    <script>
+        const icon = document.querySelector('.icon');
+        const search = document.querySelector('.search');
+
+        icon.onclick = function () {
+            search.classList.toggle('active');
+        }
+
+        function clearFunc() {
+            var clear = document.getElementById('mysearch');
+            clear.value = '';
+        }
+
+    </script>
+</body>
+</html>

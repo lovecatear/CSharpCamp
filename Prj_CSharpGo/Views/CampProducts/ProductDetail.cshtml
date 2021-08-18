@@ -1,0 +1,758 @@
+﻿@using Microsoft.AspNetCore.Http
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor user
+
+@model Prj_CSharpGo.Models.ViewModels.ProductHome
+
+@{
+    ViewData["Title"] = "商品";
+    string notgocart = user.HttpContext.Session.GetString("notgocart") ?? "Guest";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="apple-touch-icon" href="~/Aassets/img/apple-icon.png">
+    <link rel="shortcut icon" type="image/x-icon" href="~/Aassets/img/favicon.ico">
+
+    @*<link rel="stylesheet" href="~/Aassets/css/bootstrap.min.css">*@
+    <link rel="stylesheet" href="~/Aassets/css/templatemo.css">
+    <link rel="stylesheet" href="~/Aassets/css/custom.css">
+
+    <!-- Load fonts style after rendering the layout styles -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;500;700;900&display=swap">
+    <link rel="stylesheet" href="~/Aassets/css/fontawesome.min.css">
+
+    <!-- Slick -->
+    <link rel="stylesheet" type="text/css" href="~/Aassets/css/slick.min.css">
+    <link rel="stylesheet" type="text/css" href="~/Aassets/css/slick-theme.css">
+
+
+    <style>
+
+        h6, .h6, h5, .h5, h4, .h4, h3, .h3, h2, .h2, h1, .h1, li, .li, p, .p {
+            font-weight: 700;
+        }
+    </style>
+
+
+
+
+
+
+</head>
+
+<body>
+
+
+
+    <!-- Modal -->
+    <div class="modal fade bg-white" id="templatemo_search" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="w-100 pt-1 mb-5 text-right">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="" method="get" class="modal-content modal-body border-0 p-0">
+                <div class="input-group mb-2">
+                    <input type="text" class="form-control" id="inputModalSearch" name="q" placeholder="Search ...">
+                    <button type="submit" class="input-group-text bg-success text-light">
+                        <i class="fa fa-fw fa-search text-white"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+
+    <!-- Open Content -->
+
+    <section>
+        <form action="/PShopCart/AddCart" name="cart" method="post">
+            <div class="container pb-5">
+                <div class="row">
+
+                    <div class="col-lg-3" style="margin-top:95px ; width: 300px">
+                        <h1 class="h2 pb-4">商品分類</h1>
+                        <ul class="list-unstyled templatemo-accordion">
+
+                            @foreach (var item in Model.categories)
+                            {
+                                <li class="pb-3">
+                                    <a class="collapsed d-flex justify-content-between h3 text-decoration-none" href="/CampProducts/Index">
+                                        @item.CategoryName
+                                        <i class="fa fa-fw fa-chevron-circle-down mt-1"></i>
+                                    </a>
+                                    <ul class="collapse show list-unstyled pl-3">
+                                        @foreach (var itema in Model.categoriesTypeIs)
+                                        {
+                                            if (item.CategoryId == itema.CategoryId)
+                                            {
+                                                <li><a class="text-decoration-none" href="/CampProducts/Index?categoryid=@item.CategoryId&categorytype=@itema.CategoryTypeI">@itema.TypeIname</a></li>
+                                            }
+
+                                        }
+                                    </ul>
+                                </li>
+                            }
+
+                        </ul>
+                    </div>
+
+
+
+
+
+                    <div class="col-lg-5 mt-5" style="width: 500px">
+
+                        <div class="col-lg-5 mt-5" style="width: 1000px">
+
+                            <div class="row">
+                                <div class="col-md-6" style="width:500px">
+                                    <ul class="list-inline shop-top-menu pb-3 pt-1" style="width: 800px">
+                                        <li class="list-inline-item">
+                                            <a class="h3 text-dark text-decoration-none mr-3" href="/CampProducts/Index">全部</a>
+                                        </li>
+
+                                        @foreach (var item in Model.categories)
+                                        {
+                                            <li class="list-inline-item">
+                                                <a href="/CampProducts/Index?categoryid=@item.CategoryId" class="h3 text-dark text-decoration-none mr-3">@item.CategoryName</a>
+                                            </li>
+
+                                        }
+
+
+                                    </ul>
+                                </div>
+
+                            </div>
+
+
+                        </div>
+
+
+                        @foreach (var item in Model.productImgs)
+                        {
+
+
+                            <div class="card mb-3" style="margin-top: 5px; width: 500px;height:582px">
+                                <img class="card-img img-fluid" src="~/img/ProductsImg/@item.Img" alt="Card image cap" id="product-detail">  @*src="/img/ProductsImg/@Model.productImgs.ToList().FirstOrDefault(x => x.ProductId == item.ProductId).Img" alt="Card image cap" id="product-detail">*@
+                            </div>
+                        }
+
+                        <div class="row" style="width: 520px">
+
+                            <!--Start Carousel Wrapper-->
+
+                            <div id="multi-item-example" class="col-10 carousel slide carousel-multi-item" data-bs-ride="carousel" style="width:420px">
+
+                            </div>
+
+
+                            <!--End Carousel Wrapper-->
+
+                        </div>
+                    </div>
+
+                    <!-- col end -->
+
+                    @foreach (var item in Model.products)
+                    {
+                        <input type="hidden" name="UserId" value="1001">
+                        <div class="col-lg-7 mt-5" style="width: 500px">
+                            <div class="card" style="margin-top: 114px ; margin-left:20px">
+                                <div class="card-body" style="height:580px">
+                                    <h1 class="h2">@item.ProductName</h1>
+                                    <input type="hidden" name="ProductName" value="@item.ProductName">
+                                    <p class="h3 py-2">$ @item.UnitPrice</p>
+                                    <input type="hidden" name="UnitPrice" value=" @item.UnitPrice">
+
+                                    <ul class="list-inline">
+                                        <li class="list-inline-item">
+                                            <h6>庫存:</h6>
+                                        </li>
+                                        <li class="list-inline-item">
+                                            <p class="text-muted"><strong>@item.UnitInStock</strong></p>
+                                        </li>
+                                    </ul>
+
+                                    <h6>商品描述:</h6>
+                                    <p>@item.ProductDescription</p>
+                                    <ul class="list-inline">
+                                        <li class="list-inline-item">
+                                            <h6>類別 :</h6>
+                                        </li>
+
+                                        <li>@Model.categories.Where(s => s.CategoryId == item.CategoryId).FirstOrDefault().CategoryName</li>
+                                        <li>@Model.categoriesTypeIs.Where(s => s.CategoryTypeI == item.CategoryType).FirstOrDefault().TypeIname</li>
+
+
+
+                                        <li class="list-inline-item">
+                                            <h6>商品編號 :</h6>
+                                        </li>
+
+                                        <li class="list-inline-item">
+                                            <p class="text-muted"><strong>@item.ProductId</strong></p>
+                                            <input type="hidden" name="ProductId" value="@item.ProductId">
+                                        </li>
+
+                                    </ul>
+
+
+
+                                    <input type="hidden" name="product-title" value="Activewear">
+                                    <div class="row">
+
+                                        @*<div class="col-auto">
+                                                <ul class="list-inline pb-3">
+                                                    <li class="list-inline-item text-right">
+                                                        購買數量
+                                                        <input type="hidden" name="Quantity" id="product-quanity" value="1">
+                                                    </li>
+                                                    <li class="list-inline-item"><span class="btn btn-success" id="btn-minus">-</span></li>
+                                                    <li class="list-inline-item"><span class="badge bg-secondary" id="var-value">1</span></li>
+                                                    <li class="list-inline-item"><span class="btn btn-success" id="btn-plus">+</span></li>
+                                                </ul>
+                                            </div>*@
+
+                                        <div class="col-auto">
+                                            <ul class="list-inline pb-3">
+                                                <li class="list-inline-item text-right">
+                                                    購買數量
+                                                    <div class="col-sm-9">
+                                                        <select name="Quantity" class="form-control">
+
+
+                                                    @for (var i = 1; i <= item.UnitInStock; i++)
+                                                    {
+                                                        <option value="@i">@i</option>
+                                                    }
+
+                                                        </select>
+                                                    </div>
+
+                                                </li>
+                                            </ul>
+                                        </div>
+
+                                        @*<div class="col-auto">
+                                                <ul class="list-inline pb-3">
+                                                    <li class="list-inline-item text-right">
+                                                        數量
+                                                        <input type="hidden" name="Quantity" id="product-quanity" value="1">
+                                                    </li>
+                                                    <li class="list-inline-item"><span class="badge bg-secondary" id="var-value">1</span></li>
+                                                </ul>
+                                            </div>*@
+
+                                    </div>
+                                    <div class="row pb-3">
+                                        <div class="col d-grid">
+                                            <input type="hidden" name="notgocart" id="notgocart" value="notgocart" />
+                                            <button type="submit" class="btn btn-success btn-lg" name="submit" value="buy" style="font-weight: 700" id="gocart1">購買</button>
+                                            
+                                            @*<input type="submit" name="add" value="購買" onclick="toAdd()" />*@
+                                        
+                                        </div>
+                                        <div class="col d-grid">
+
+                                            <button type="submit" class="btn btn-success btn-lg" name="submit" value="buy" style="font-weight: 700">加入購物車</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    }
+
+                </div>
+            </div>
+        </form>
+    </section>
+
+    <!-- Close Content -->
+    <!-- Start Article -->
+    <section class="py-5" style="margin-top:-50px">
+        <div class="container">
+            <div class="row text-left p-2 pb-3">
+                <h4>產品推薦</h4>
+            </div>
+
+            <!--Start Carousel Wrapper-->
+            <div id="carousel-related-product">
+
+
+                <div class="p-2 pb-3">
+                    <div class="product-wap card rounded-0">
+                        <div class="card rounded-0" style="width:304.4px ; height:350px">
+                            <img class="card-img rounded-0 img-fluid" src="~/img/ProductsImg/Aa10CS003.jpeg">
+                            <div class="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
+                                <ul class="list-unstyled">
+                                    @*<li><a class="btn btn-success text-white" href="shop-single.html"><i class="far fa-heart"></i></a></li>*@
+                                    <li><a class="btn btn-success text-white mt-2" href="/CampProducts/ProductDetail?productid=Aa10CS003"><i class="far fa-eye"></i></a></li>
+                                    <li><a class="btn btn-success text-white mt-2" href="shop-single.html"><i class="fas fa-cart-plus"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <a href="shop-single.html" class="h3 text-decoration-none">經典白色八角帳</a>
+                            <ul class="w-100 list-unstyled d-flex justify-content-between mb-0">
+                                <li>帳篷</li>
+                                <li>寢帳</li>
+                                <li class="pt-2">
+                                    <span class="product-color-dot color-dot-red float-left rounded-circle ml-1"></span>
+                                    <span class="product-color-dot color-dot-blue float-left rounded-circle ml-1"></span>
+                                    <span class="product-color-dot color-dot-black float-left rounded-circle ml-1"></span>
+                                    <span class="product-color-dot color-dot-light float-left rounded-circle ml-1"></span>
+                                    <span class="product-color-dot color-dot-green float-left rounded-circle ml-1"></span>
+                                </li>
+                            </ul>
+
+                            <p class="text-center mb-0">$16500</p>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="p-2 pb-3">
+                    <div class="product-wap card rounded-0">
+                        <div class="card rounded-0" style="width:304.4px ; height:350px">
+                            <img class="card-img rounded-0 img-fluid" src="~/img/ProductsImg/Cc20CL062.jpg">
+                            <div class="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
+                                <ul class="list-unstyled">
+                                    @*<li><a class="btn btn-success text-white" href="shop-single.html"><i class="far fa-heart"></i></a></li>*@
+                                    <li><a class="btn btn-success text-white mt-2" href="/CampProducts/ProductDetail?productid=Cc20CL062"><i class="far fa-eye"></i></a></li>
+                                    <li><a class="btn btn-success text-white mt-2" href="shop-single.html"><i class="fas fa-cart-plus"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <a href="shop-single.html" class="h3 text-decoration-none">輕薄摺疊椅/淺灰</a>
+                            <ul class="w-100 list-unstyled d-flex justify-content-between mb-0">
+                                <li>戶外家具</li>
+                                <li>椅子</li>
+                                <li class="pt-2">
+                                    <span class="product-color-dot color-dot-red float-left rounded-circle ml-1"></span>
+                                    <span class="product-color-dot color-dot-blue float-left rounded-circle ml-1"></span>
+                                    <span class="product-color-dot color-dot-black float-left rounded-circle ml-1"></span>
+                                    <span class="product-color-dot color-dot-light float-left rounded-circle ml-1"></span>
+                                    <span class="product-color-dot color-dot-green float-left rounded-circle ml-1"></span>
+                                </li>
+                            </ul>
+
+                            <p class="text-center mb-0">$1980</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-2 pb-3">
+                    <div class="product-wap card rounded-0">
+                        <div class="card rounded-0" style="width:304.4px ; height:350px">
+                            <img class="card-img rounded-0 img-fluid" src="~/img/ProductsImg/Aa44ND036.jpg">
+                            <div class="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
+                                <ul class="list-unstyled">
+                                    @*<li><a class="btn btn-success text-white" href="shop-single.html"><i class="far fa-heart"></i></a></li>*@
+                                    <li><a class="btn btn-success text-white mt-2" href="/CampProducts/ProductDetail?productid=Aa44ND036"><i class="far fa-eye"></i></a></li>
+                                    <li><a class="btn btn-success text-white mt-2" href="shop-single.html"><i class="fas fa-cart-plus"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <a href="shop-single.html" class="h3 text-decoration-none">營繩-2.5mm/15米</a>
+                            <ul class="w-100 list-unstyled d-flex justify-content-between mb-0">
+                                <li>帳篷</li>
+                                <li>帳篷周邊</li>
+                                <li class="pt-2">
+                                    <span class="product-color-dot color-dot-red float-left rounded-circle ml-1"></span>
+                                    <span class="product-color-dot color-dot-blue float-left rounded-circle ml-1"></span>
+                                    <span class="product-color-dot color-dot-black float-left rounded-circle ml-1"></span>
+                                    <span class="product-color-dot color-dot-light float-left rounded-circle ml-1"></span>
+                                    <span class="product-color-dot color-dot-green float-left rounded-circle ml-1"></span>
+                                </li>
+                            </ul>
+
+                            <p class="text-center mb-0">$460</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-2 pb-3">
+                    <div class="product-wap card rounded-0">
+                        <div class="card rounded-0" style="width:304.4px ; height:350px">
+                            <img class="card-img rounded-0 img-fluid" src="~/img/ProductsImg/Bb20CL044.jpg">
+                            <div class="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
+                                <ul class="list-unstyled">
+                                    @*<li><a class="btn btn-success text-white" href="shop-single.html"><i class="far fa-heart"></i></a></li>*@
+                                    <li><a class="btn btn-success text-white mt-2" href="/CampProducts/ProductDetail?productid=Bb20CL044"><i class="far fa-eye"></i></a></li>
+                                    <li><a class="btn btn-success text-white mt-2" href="shop-single.html"><i class="fas fa-cart-plus"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <a href="shop-single.html" class="h3 text-decoration-none">2 IN 1家庭睡袋/C10</a>
+                            <ul class="w-100 list-unstyled d-flex justify-content-between mb-0">
+                                <li>寢具</li>
+                                <li>睡袋/枕頭/毛毯</li>
+                                <li class="pt-2">
+                                    <span class="product-color-dot color-dot-red float-left rounded-circle ml-1"></span>
+                                    <span class="product-color-dot color-dot-blue float-left rounded-circle ml-1"></span>
+                                    <span class="product-color-dot color-dot-black float-left rounded-circle ml-1"></span>
+                                    <span class="product-color-dot color-dot-light float-left rounded-circle ml-1"></span>
+                                    <span class="product-color-dot color-dot-green float-left rounded-circle ml-1"></span>
+                                </li>
+                            </ul>
+
+                            <p class="text-center mb-0">$3150</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-2 pb-3">
+                    <div class="product-wap card rounded-0">
+                        <div class="card rounded-0" style="width:304.4px ; height:350px">
+                            <img class="card-img rounded-0 img-fluid" src="~/img/ProductsImg/Dd32CL111.jpg">
+                            <div class="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
+                                <ul class="list-unstyled">
+                                    @*<li><a class="btn btn-success text-white" href="shop-single.html"><i class="far fa-heart"></i></a></li>*@
+                                    <li><a class="btn btn-success text-white mt-2" href="/CampProducts/ProductDetail?productid=Dd32CL111"><i class="far fa-eye"></i></a></li>
+                                    <li><a class="btn btn-success text-white mt-2" href="shop-single.html"><i class="fas fa-cart-plus"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <a href="shop-single.html" class="h3 text-decoration-none">不鏽鋼焚火台</a>
+                            <ul class="w-100 list-unstyled d-flex justify-content-between mb-0">
+                                <li class="">廚房用品</li>
+                                <li class="">燒烤用品</li>
+                                <li class="pt-2">
+                                    <span class="product-color-dot color-dot-red float-left rounded-circle ml-1"></span>
+                                    <span class="product-color-dot color-dot-blue float-left rounded-circle ml-1"></span>
+                                    <span class="product-color-dot color-dot-black float-left rounded-circle ml-1"></span>
+                                    <span class="product-color-dot color-dot-light float-left rounded-circle ml-1"></span>
+                                    <span class="product-color-dot color-dot-green float-left rounded-circle ml-1"></span>
+                                </li>
+                            </ul>
+
+                            <p class="text-center mb-0">$6500</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-2 pb-3">
+                    <div class="product-wap card rounded-0">
+                        <div class="card rounded-0" style="width:304.4px ; height:350px">
+                            <img class="card-img rounded-0 img-fluid" src="~/img/ProductsImg/Dd31CL103.jpg">
+                            <div class="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
+                                <ul class="list-unstyled">
+                                    @*<li><a class="btn btn-success text-white" href="shop-single.html"><i class="far fa-heart"></i></a></li>*@
+                                    <li><a class="btn btn-success text-white mt-2" href="/CampProducts/ProductDetail?productid=Dd31CL103"><i class="far fa-eye"></i></a></li>
+                                    <li><a class="btn btn-success text-white mt-2" href="shop-single.html"><i class="fas fa-cart-plus"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <a href="shop-single.html" class="h3 text-decoration-none">章魚燒烤盤</a>
+                            <ul class="w-100 list-unstyled d-flex justify-content-between mb-0">
+                                <li>廚房用品</li>
+                                <li>燒烤用品</li>
+                                <li class="pt-2">
+                                    <span class="product-color-dot color-dot-red float-left rounded-circle ml-1"></span>
+                                    <span class="product-color-dot color-dot-blue float-left rounded-circle ml-1"></span>
+                                    <span class="product-color-dot color-dot-black float-left rounded-circle ml-1"></span>
+                                    <span class="product-color-dot color-dot-light float-left rounded-circle ml-1"></span>
+                                    <span class="product-color-dot color-dot-green float-left rounded-circle ml-1"></span>
+                                </li>
+                            </ul>
+
+                            <p class="text-center mb-0">$1200</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-2 pb-3">
+                    <div class="product-wap card rounded-0">
+                        <div class="card rounded-0" style="width:304.4px ; height:350px">
+                            <img class="card-img rounded-0 img-fluid" src="~/img/ProductsImg/Dd50CL127.jpg">
+                            <div class="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
+                                <ul class="list-unstyled">
+                                    @*<li><a class="btn btn-success text-white" href="shop-single.html"><i class="far fa-heart"></i></a></li>*@
+                                    <li><a class="btn btn-success text-white mt-2" href="/CampProducts/ProductDetail?productid=Dd50CL127"><i class="far fa-eye"></i></a></li>
+                                    <li><a class="btn btn-success text-white mt-2" href="shop-single.html"><i class="fas fa-cart-plus"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <a href="shop-single.html" class="h3 text-decoration-none">28L EXCURSION美利紅冰箱</a>
+                            <ul class="w-100 list-unstyled d-flex justify-content-between mb-0">
+                                <li>廚房用品</li>
+                                <li>保冷設備</li>
+                                <li class="pt-2">
+                                    <span class="product-color-dot color-dot-red float-left rounded-circle ml-1"></span>
+                                    <span class="product-color-dot color-dot-blue float-left rounded-circle ml-1"></span>
+                                    <span class="product-color-dot color-dot-black float-left rounded-circle ml-1"></span>
+                                    <span class="product-color-dot color-dot-light float-left rounded-circle ml-1"></span>
+                                    <span class="product-color-dot color-dot-green float-left rounded-circle ml-1"></span>
+                                </li>
+                            </ul>
+
+                            <p class="text-center mb-0">$1600</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-2 pb-3">
+                    <div class="product-wap card rounded-0">
+                        <div class="card rounded-0" style="width:304.4px ; height:350px">
+                            <img class="card-img rounded-0 img-fluid" src="~/img/ProductsImg/Dd31CL102.jpg">
+                            <div class="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
+                                <ul class="list-unstyled">
+                                    @*<li><a class="btn btn-success text-white" href="shop-single.html"><i class="far fa-heart"></i></a></li>*@
+                                    <li><a class="btn btn-success text-white mt-2" href="/CampProducts/ProductDetail?productid=Dd31CL102"><i class="far fa-eye"></i></a></li>
+                                    <li><a class="btn btn-success text-white mt-2" href="shop-single.html"><i class="fas fa-cart-plus"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <a href="shop-single.html" class="h3 text-decoration-none">不鏽鋼煙燻桶</a>
+                            <ul class="w-100 list-unstyled d-flex justify-content-between mb-0">
+                                <li>廚房用品</li>
+                                <li>燒烤用品</li>
+                                <li class="pt-2">
+                                    <span class="product-color-dot color-dot-red float-left rounded-circle ml-1"></span>
+                                    <span class="product-color-dot color-dot-blue float-left rounded-circle ml-1"></span>
+                                    <span class="product-color-dot color-dot-black float-left rounded-circle ml-1"></span>
+                                    <span class="product-color-dot color-dot-light float-left rounded-circle ml-1"></span>
+                                    <span class="product-color-dot color-dot-green float-left rounded-circle ml-1"></span>
+                                </li>
+                            </ul>
+
+                            <p class="text-center mb-0">$2560</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-2 pb-3">
+                    <div class="product-wap card rounded-0">
+                        <div class="card rounded-0" style="width:304.4px ; height:350px">
+                            <img class="card-img rounded-0 img-fluid" src="~/img/ProductsImg/Dd42ZD118.jpg">
+                            <div class="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
+                                <ul class="list-unstyled">
+                                    @*<li><a class="btn btn-success text-white" href="shop-single.html"><i class="far fa-heart"></i></a></li>*@
+                                    <li><a class="btn btn-success text-white mt-2" href="/CampProducts/ProductDetail?productid=Dd42ZD118"><i class="far fa-eye"></i></a></li>
+                                    <li><a class="btn btn-success text-white mt-2" href="shop-single.html"><i class="fas fa-cart-plus"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <a href="shop-single.html" class="h3 text-decoration-none">四人餐具組</a>
+                            <ul class="w-100 list-unstyled d-flex justify-content-between mb-0">
+                                <li>廚房用品</li>
+                                <li>燒烤用品</li>
+                                <li class="pt-2">
+                                    <span class="product-color-dot color-dot-red float-left rounded-circle ml-1"></span>
+                                    <span class="product-color-dot color-dot-blue float-left rounded-circle ml-1"></span>
+                                    <span class="product-color-dot color-dot-black float-left rounded-circle ml-1"></span>
+                                    <span class="product-color-dot color-dot-light float-left rounded-circle ml-1"></span>
+                                    <span class="product-color-dot color-dot-green float-left rounded-circle ml-1"></span>
+                                </li>
+                            </ul>
+
+                            <p class="text-center mb-0">$1900</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-2 pb-3">
+                    <div class="product-wap card rounded-0">
+                        <div class="card rounded-0" style="width:304.4px ; height:350px">
+                            <img class="card-img rounded-0 img-fluid" src="~/img/ProductsImg/Aa41ND016.jpg">
+                            <div class="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
+                                <ul class="list-unstyled">
+                                    @*<li><a class="btn btn-success text-white" href="shop-single.html"><i class="far fa-heart"></i></a></li>*@
+                                    <li><a class="btn btn-success text-white mt-2" href="/CampProducts/ProductDetail?productid=Aa41ND016"><i class="far fa-eye"></i></a></li>
+                                    <li><a class="btn btn-success text-white mt-2" href="shop-single.html"><i class="fas fa-cart-plus"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <a href="shop-single.html" class="h3 text-decoration-none">Oupidatat non</a>
+                            <ul class="w-100 list-unstyled d-flex justify-content-between mb-0">
+                                <li>帳篷</li>
+                                <li>帳篷周邊</li>
+                                <li class="pt-2">
+                                    <span class="product-color-dot color-dot-red float-left rounded-circle ml-1"></span>
+                                    <span class="product-color-dot color-dot-blue float-left rounded-circle ml-1"></span>
+                                    <span class="product-color-dot color-dot-black float-left rounded-circle ml-1"></span>
+                                    <span class="product-color-dot color-dot-light float-left rounded-circle ml-1"></span>
+                                    <span class="product-color-dot color-dot-green float-left rounded-circle ml-1"></span>
+                                </li>
+                            </ul>
+
+                            <p class="text-center mb-0">$9080</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-2 pb-3">
+                    <div class="product-wap card rounded-0">
+                        <div class="card rounded-0" style="width:304.4px ; height:350px">
+                            <img class="card-img rounded-0 img-fluid" src="~/img/ProductsImg/Aa43CS026.jpeg">
+                            <div class="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
+                                <ul class="list-unstyled">
+                                    @*<li><a class="btn btn-success text-white" href="shop-single.html"><i class="far fa-heart"></i></a></li>*@
+                                    <li><a class="btn btn-success text-white mt-2" href="/CampProducts/ProductDetail?productid=Aa43CS026"><i class="far fa-eye"></i></a></li>
+                                    <li><a class="btn btn-success text-white mt-2" href="shop-single.html"><i class="fas fa-cart-plus"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <a href="shop-single.html" class="h3 text-decoration-none">鋁製營柱240cm-黑</a>
+                            <ul class="w-100 list-unstyled d-flex justify-content-between mb-0">
+                                <li>帳篷</li>
+                                <li>帳篷周邊</li>
+                                <li class="pt-2">
+                                    <span class="product-color-dot color-dot-red float-left rounded-circle ml-1"></span>
+                                    <span class="product-color-dot color-dot-blue float-left rounded-circle ml-1"></span>
+                                    <span class="product-color-dot color-dot-black float-left rounded-circle ml-1"></span>
+                                    <span class="product-color-dot color-dot-light float-left rounded-circle ml-1"></span>
+                                    <span class="product-color-dot color-dot-green float-left rounded-circle ml-1"></span>
+                                </li>
+                            </ul>
+
+                            <p class="text-center mb-0">$2100</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-2 pb-3">
+                    <div class="product-wap card rounded-0">
+                        <div class="card rounded-0" style="width:304.4px ; height:350px">
+                            <img class="card-img rounded-0 img-fluid" src="~/img/ProductsImg/Cc10CS051.jpeg">
+                            <div class="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
+                                <ul class="list-unstyled">
+                                    @*<li><a class="btn btn-success text-white" href="shop-single.html"><i class="far fa-heart"></i></a></li>*@
+                                    <li><a class="btn btn-success text-white mt-2" href="/CampProducts/ProductDetail?productid=Cc10CS051"><i class="far fa-eye"></i></a></li>
+                                    <li><a class="btn btn-success text-white mt-2" href="shop-single.html"><i class="fas fa-cart-plus"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <a href="shop-single.html" class="h3 text-decoration-none">原木六角內桌</a>
+                            <ul class="w-100 list-unstyled d-flex justify-content-between mb-0">
+                                <li>戶外家具</li>
+                                <li>桌子</li>
+                                <li class="pt-2">
+                                    <span class="product-color-dot color-dot-red float-left rounded-circle ml-1"></span>
+                                    <span class="product-color-dot color-dot-blue float-left rounded-circle ml-1"></span>
+                                    <span class="product-color-dot color-dot-black float-left rounded-circle ml-1"></span>
+                                    <span class="product-color-dot color-dot-light float-left rounded-circle ml-1"></span>
+                                    <span class="product-color-dot color-dot-green float-left rounded-circle ml-1"></span>
+                                </li>
+                            </ul>
+
+                            <p class="text-center mb-0">$6800</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+        </div>
+    </section>
+    <!-- End Article -->
+    <!-- Start Script -->
+    <script src="~/Aassets/js/jquery-1.11.0.min.js"></script>
+    <script src="~/Aassets/js/jquery-migrate-1.2.1.min.js"></script>
+    <script src="~/Aassets/js/bootstrap.bundle.min.js"></script>
+    @*<script src="~/Aassets/js/templatemo.js"></script>*@
+    <script src="~/Aassets/js/custom.js"></script>
+    <!-- End Script -->
+    <!-- Start Slider Script -->
+    <script src="~/Aassets/js/slick.min.js"></script>
+    <script>
+        $('#carousel-related-product').slick({
+            infinite: true,
+            arrows: false,
+            slidesToShow: 4,
+            slidesToScroll: 3,
+            dots: true,
+            responsive: [{
+                breakpoint: 1024,
+                settings: {
+                    slidesToShow: 3,
+                    slidesToScroll: 3
+                }
+            },
+            {
+                breakpoint: 600,
+                settings: {
+                    slidesToShow: 2,
+                    slidesToScroll: 3
+                }
+            },
+            {
+                breakpoint: 480,
+                settings: {
+                    slidesToShow: 2,
+                    slidesToScroll: 3
+                }
+            }
+            ]
+        });
+
+        $("#gocart1").click(function (event) {
+
+
+            $("#notgocart").val("gocart");
+
+
+         });
+
+
+    </script>
+
+    <script src="~/js/toastr.min.js"></script>
+    <link href="~/Content/toastr.min.css" rel="stylesheet" />
+
+    @if (notgocart == "已加入購物車!")
+    {
+        <script type="text/javascript">
+
+        $(function () {
+
+        Command: toastr["success"]("@notgocart");
+        @{user.HttpContext.Session.Remove("notgocart");}
+
+        toastr.options = {
+            "closeButton": false,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": true,
+            "positionClass": "toast-top-right",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        }
+    })
+        </script>
+    }
+
+    <!-- End Slider Script -->
+
+</body>
+
+</html>

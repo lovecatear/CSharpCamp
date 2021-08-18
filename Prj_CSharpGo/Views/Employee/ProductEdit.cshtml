@@ -1,0 +1,619 @@
+﻿@using Microsoft.AspNetCore.Http
+
+@model Prj_CSharpGo.Models.ViewModels.UpImg
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor emp
+
+@{
+    string empToastr = emp.HttpContext.Session.GetString("employeeToastr") ?? "Guest";
+}
+
+@{
+    ViewData["Title"] = "ProductEdit";
+    Layout = "EmployeeLayout";
+
+    string Img1= "";
+    foreach (var item in ViewData["Img"] as IEnumerable<ProductImg>) { Img1 = item.Img; }
+
+
+}
+
+<h1 class="title_font">商品編輯</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form action="/Employee/ProductEdit/@Model.ProductId" method="post" enctype="multipart/form-data">
+
+            @Html.AntiForgeryToken()
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label" for="ProductId">編號</label>
+                <input class="form-control col-sm-9" type="text" data-val="true" data-val-required="不可空白" id="ProductId" name="ProductId" readonly value="@Model.ProductId" />
+                <label class="col-sm-3 col-form-label"></label>
+                <span class="text-danger field-validation-valid" data-valmsg-for="ProductId" data-valmsg-replace="true"></span>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label" for="CategoryType">類別</label>
+
+                <select name="CategoryType" class="form-control col-sm-9">
+                    @{if (Model.CategoryType == "a1")
+                        {
+                            <optgroup label="帳篷">
+                                <option value="a1" selected>寢帳</option>
+                                <option value="a2">客廳</option>
+                                <option value="a3">天幕</option>
+                                <option value="a4">帳篷周邊</option>
+                            </optgroup>
+                            <optgroup label="寢具">
+                                <option value="b1">睡墊/充氣床/行軍床</option>
+                                <option value="b2">睡袋/枕頭/毛毯</option>
+                                <option value="b3">配件</option>
+                            </optgroup>
+                            <optgroup label="戶外家具">
+                                <option value="c1">桌子</option>
+                                <option value="c2">椅子</option>
+                                <option value="c3">置物架</option>
+                                <option value="c4">燈具</option>
+                            </optgroup>
+                            <optgroup label="廚房用品">
+                                <option value="d1">爐具</option>
+                                <option value="d2">炊煮用品</option>
+                                <option value="d3">燒烤用品</option>
+                                <option value="d4">餐飲用具</option>
+                                <option value="d5">保冷設備</option>
+                            </optgroup>
+                            <option value="e0">食品</option>
+                        }
+                        else if (Model.CategoryType == "a2")
+                        {
+                            <optgroup label="帳篷">
+                                <option value="a1">寢帳</option>
+                                <option value="a2" selected>客廳</option>
+                                <option value="a3">天幕</option>
+                                <option value="a4">帳篷周邊</option>
+                            </optgroup>
+                            <optgroup label="寢具">
+                                <option value="b1">睡墊/充氣床/行軍床</option>
+                                <option value="b2">睡袋/枕頭/毛毯</option>
+                                <option value="b3">配件</option>
+                            </optgroup>
+                            <optgroup label="戶外家具">
+                                <option value="c1">桌子</option>
+                                <option value="c2">椅子</option>
+                                <option value="c3">置物架</option>
+                                <option value="c4">燈具</option>
+                            </optgroup>
+                            <optgroup label="廚房用品">
+                                <option value="d1">爐具</option>
+                                <option value="d2">炊煮用品</option>
+                                <option value="d3">燒烤用品</option>
+                                <option value="d4">餐飲用具</option>
+                                <option value="d5">保冷設備</option>
+                            </optgroup>
+                            <option value="e0">食品</option>
+                        }
+                        else if (Model.CategoryType == "a3")
+                        {
+                            <optgroup label="帳篷">
+                                <option value="a1">寢帳</option>
+                                <option value="a2">客廳</option>
+                                <option value="a3" selected>天幕</option>
+                                <option value="a4">帳篷周邊</option>
+                            </optgroup>
+                            <optgroup label="寢具">
+                                <option value="b1">睡墊/充氣床/行軍床</option>
+                                <option value="b2">睡袋/枕頭/毛毯</option>
+                                <option value="b3">配件</option>
+                            </optgroup>
+                            <optgroup label="戶外家具">
+                                <option value="c1">桌子</option>
+                                <option value="c2">椅子</option>
+                                <option value="c3">置物架</option>
+                                <option value="c4">燈具</option>
+                            </optgroup>
+                            <optgroup label="廚房用品">
+                                <option value="d1">爐具</option>
+                                <option value="d2">炊煮用品</option>
+                                <option value="d3">燒烤用品</option>
+                                <option value="d4">餐飲用具</option>
+                                <option value="d5">保冷設備</option>
+                            </optgroup>
+                            <option value="e0">食品</option>
+                        }
+                        else if (Model.CategoryType == "a4")
+                        {
+                            <optgroup label="帳篷">
+                                <option value="a1">寢帳</option>
+                                <option value="a2">客廳</option>
+                                <option value="a3">天幕</option>
+                                <option value="a4" selected>帳篷周邊</option>
+                            </optgroup>
+                            <optgroup label="寢具">
+                                <option value="b1">睡墊/充氣床/行軍床</option>
+                                <option value="b2">睡袋/枕頭/毛毯</option>
+                                <option value="b3">配件</option>
+                            </optgroup>
+                            <optgroup label="戶外家具">
+                                <option value="c1">桌子</option>
+                                <option value="c2">椅子</option>
+                                <option value="c3">置物架</option>
+                                <option value="c4">燈具</option>
+                            </optgroup>
+                            <optgroup label="廚房用品">
+                                <option value="d1">爐具</option>
+                                <option value="d2">炊煮用品</option>
+                                <option value="d3">燒烤用品</option>
+                                <option value="d4">餐飲用具</option>
+                                <option value="d5">保冷設備</option>
+                            </optgroup>
+                            <option value="e0">食品</option>
+                        }
+                        else if (Model.CategoryType == "b1")
+                        {
+                            <optgroup label="帳篷">
+                                <option value="a1">寢帳</option>
+                                <option value="a2">客廳</option>
+                                <option value="a3">天幕</option>
+                                <option value="a4">帳篷周邊</option>
+                            </optgroup>
+                            <optgroup label="寢具">
+                                <option value="b1" selected>睡墊/充氣床/行軍床</option>
+                                <option value="b2">睡袋/枕頭/毛毯</option>
+                                <option value="b3">配件</option>
+                            </optgroup>
+                            <optgroup label="戶外家具">
+                                <option value="c1">桌子</option>
+                                <option value="c2">椅子</option>
+                                <option value="c3">置物架</option>
+                                <option value="c4">燈具</option>
+                            </optgroup>
+                            <optgroup label="廚房用品">
+                                <option value="d1">爐具</option>
+                                <option value="d2">炊煮用品</option>
+                                <option value="d3">燒烤用品</option>
+                                <option value="d4">餐飲用具</option>
+                                <option value="d5">保冷設備</option>
+                            </optgroup>
+                            <option value="e0">食品</option>
+                        }
+                        else if (Model.CategoryType == "b2")
+                        {
+                            <optgroup label="帳篷">
+                                <option value="a1">寢帳</option>
+                                <option value="a2">客廳</option>
+                                <option value="a3">天幕</option>
+                                <option value="a4">帳篷周邊</option>
+                            </optgroup>
+                            <optgroup label="寢具">
+                                <option value="b1">睡墊/充氣床/行軍床</option>
+                                <option value="b2" selected>睡袋/枕頭/毛毯</option>
+                                <option value="b3">配件</option>
+                            </optgroup>
+                            <optgroup label="戶外家具">
+                                <option value="c1">桌子</option>
+                                <option value="c2">椅子</option>
+                                <option value="c3">置物架</option>
+                                <option value="c4">燈具</option>
+                            </optgroup>
+                            <optgroup label="廚房用品">
+                                <option value="d1">爐具</option>
+                                <option value="d2">炊煮用品</option>
+                                <option value="d3">燒烤用品</option>
+                                <option value="d4">餐飲用具</option>
+                                <option value="d5">保冷設備</option>
+                            </optgroup>
+                            <option value="e0">食品</option>
+                        }
+                        else if (Model.CategoryType == "b3")
+                        {
+                            <optgroup label="帳篷">
+                                <option value="a1">寢帳</option>
+                                <option value="a2">客廳</option>
+                                <option value="a3">天幕</option>
+                                <option value="a4">帳篷周邊</option>
+                            </optgroup>
+                            <optgroup label="寢具">
+                                <option value="b1">睡墊/充氣床/行軍床</option>
+                                <option value="b2">睡袋/枕頭/毛毯</option>
+                                <option value="b3 selected">配件</option>
+                            </optgroup>
+                            <optgroup label="戶外家具">
+                                <option value="c1">桌子</option>
+                                <option value="c2">椅子</option>
+                                <option value="c3">置物架</option>
+                                <option value="c4">燈具</option>
+                            </optgroup>
+                            <optgroup label="廚房用品">
+                                <option value="d1">爐具</option>
+                                <option value="d2">炊煮用品</option>
+                                <option value="d3">燒烤用品</option>
+                                <option value="d4">餐飲用具</option>
+                                <option value="d5">保冷設備</option>
+                            </optgroup>
+                            <option value="e0">食品</option>
+                        }
+                        else if (Model.CategoryType == "c1")
+                        {
+                            <optgroup label="帳篷">
+                                <option value="a1">寢帳</option>
+                                <option value="a2">客廳</option>
+                                <option value="a3">天幕</option>
+                                <option value="a4">帳篷周邊</option>
+                            </optgroup>
+                            <optgroup label="寢具">
+                                <option value="b1">睡墊/充氣床/行軍床</option>
+                                <option value="b2">睡袋/枕頭/毛毯</option>
+                                <option value="b3">配件</option>
+                            </optgroup>
+                            <optgroup label="戶外家具">
+                                <option value="c1" selected>桌子</option>
+                                <option value="c2">椅子</option>
+                                <option value="c3">置物架</option>
+                                <option value="c4">燈具</option>
+                            </optgroup>
+                            <optgroup label="廚房用品">
+                                <option value="d1">爐具</option>
+                                <option value="d2">炊煮用品</option>
+                                <option value="d3">燒烤用品</option>
+                                <option value="d4">餐飲用具</option>
+                                <option value="d5">保冷設備</option>
+                            </optgroup>
+                            <option value="e0">食品</option>
+                        }
+                        else if (Model.CategoryType == "c2")
+                        {
+                            <optgroup label="帳篷">
+                                <option value="a1">寢帳</option>
+                                <option value="a2">客廳</option>
+                                <option value="a3">天幕</option>
+                                <option value="a4">帳篷周邊</option>
+                            </optgroup>
+                            <optgroup label="寢具">
+                                <option value="b1">睡墊/充氣床/行軍床</option>
+                                <option value="b2">睡袋/枕頭/毛毯</option>
+                                <option value="b3">配件</option>
+                            </optgroup>
+                            <optgroup label="戶外家具">
+                                <option value="c1">桌子</option>
+                                <option value="c2" selected>椅子</option>
+                                <option value="c3">置物架</option>
+                                <option value="c4">燈具</option>
+                            </optgroup>
+                            <optgroup label="廚房用品">
+                                <option value="d1">爐具</option>
+                                <option value="d2">炊煮用品</option>
+                                <option value="d3">燒烤用品</option>
+                                <option value="d4">餐飲用具</option>
+                                <option value="d5">保冷設備</option>
+                            </optgroup>
+                            <option value="e0">食品</option>
+                        }
+                        else if (Model.CategoryType == "c3")
+                        {
+                            <optgroup label="帳篷">
+                                <option value="a1">寢帳</option>
+                                <option value="a2">客廳</option>
+                                <option value="a3">天幕</option>
+                                <option value="a4">帳篷周邊</option>
+                            </optgroup>
+                            <optgroup label="寢具">
+                                <option value="b1">睡墊/充氣床/行軍床</option>
+                                <option value="b2">睡袋/枕頭/毛毯</option>
+                                <option value="b3">配件</option>
+                            </optgroup>
+                            <optgroup label="戶外家具">
+                                <option value="c1">桌子</option>
+                                <option value="c2">椅子</option>
+                                <option value="c3" selected>置物架</option>
+                                <option value="c4">燈具</option>
+                            </optgroup>
+                            <optgroup label="廚房用品">
+                                <option value="d1">爐具</option>
+                                <option value="d2">炊煮用品</option>
+                                <option value="d3">燒烤用品</option>
+                                <option value="d4">餐飲用具</option>
+                                <option value="d5">保冷設備</option>
+                            </optgroup>
+                            <option value="e0">食品</option>
+                        }
+                        else if (Model.CategoryType == "c4")
+                        {
+                            <optgroup label="帳篷">
+                                <option value="a1">寢帳</option>
+                                <option value="a2">客廳</option>
+                                <option value="a3">天幕</option>
+                                <option value="a4">帳篷周邊</option>
+                            </optgroup>
+                            <optgroup label="寢具">
+                                <option value="b1">睡墊/充氣床/行軍床</option>
+                                <option value="b2">睡袋/枕頭/毛毯</option>
+                                <option value="b3">配件</option>
+                            </optgroup>
+                            <optgroup label="戶外家具">
+                                <option value="c1">桌子</option>
+                                <option value="c2">椅子</option>
+                                <option value="c3">置物架</option>
+                                <option value="c4" selected>燈具</option>
+                            </optgroup>
+                            <optgroup label="廚房用品">
+                                <option value="d1">爐具</option>
+                                <option value="d2">炊煮用品</option>
+                                <option value="d3">燒烤用品</option>
+                                <option value="d4">餐飲用具</option>
+                                <option value="d5">保冷設備</option>
+                            </optgroup>
+                            <option value="e0">食品</option>
+                        }
+                        else if (Model.CategoryType == "d1")
+                        {
+                            <optgroup label="帳篷">
+                                <option value="a1">寢帳</option>
+                                <option value="a2">客廳</option>
+                                <option value="a3">天幕</option>
+                                <option value="a4">帳篷周邊</option>
+                            </optgroup>
+                            <optgroup label="寢具">
+                                <option value="b1">睡墊/充氣床/行軍床</option>
+                                <option value="b2">睡袋/枕頭/毛毯</option>
+                                <option value="b3">配件</option>
+                            </optgroup>
+                            <optgroup label="戶外家具">
+                                <option value="c1">桌子</option>
+                                <option value="c2">椅子</option>
+                                <option value="c3">置物架</option>
+                                <option value="c4">燈具</option>
+                            </optgroup>
+                            <optgroup label="廚房用品">
+                                <option value="d1" selected>爐具</option>
+                                <option value="d2">炊煮用品</option>
+                                <option value="d3">燒烤用品</option>
+                                <option value="d4">餐飲用具</option>
+                                <option value="d5">保冷設備</option>
+                            </optgroup>
+                            <option value="e0">食品</option>
+                        }
+                        else if (Model.CategoryType == "d2")
+                        {
+                            <optgroup label="帳篷">
+                                <option value="a1">寢帳</option>
+                                <option value="a2">客廳</option>
+                                <option value="a3">天幕</option>
+                                <option value="a4">帳篷周邊</option>
+                            </optgroup>
+                            <optgroup label="寢具">
+                                <option value="b1">睡墊/充氣床/行軍床</option>
+                                <option value="b2">睡袋/枕頭/毛毯</option>
+                                <option value="b3">配件</option>
+                            </optgroup>
+                            <optgroup label="戶外家具">
+                                <option value="c1">桌子</option>
+                                <option value="c2">椅子</option>
+                                <option value="c3">置物架</option>
+                                <option value="c4">燈具</option>
+                            </optgroup>
+                            <optgroup label="廚房用品">
+                                <option value="d1">爐具</option>
+                                <option value="d2" selected>炊煮用品</option>
+                                <option value="d3">燒烤用品</option>
+                                <option value="d4">餐飲用具</option>
+                                <option value="d5">保冷設備</option>
+                            </optgroup>
+                            <option value="e0">食品</option>
+                        }
+                        else if (Model.CategoryType == "d3")
+                        {
+                            <optgroup label="帳篷">
+                                <option value="a1">寢帳</option>
+                                <option value="a2">客廳</option>
+                                <option value="a3">天幕</option>
+                                <option value="a4">帳篷周邊</option>
+                            </optgroup>
+                            <optgroup label="寢具">
+                                <option value="b1">睡墊/充氣床/行軍床</option>
+                                <option value="b2">睡袋/枕頭/毛毯</option>
+                                <option value="b3">配件</option>
+                            </optgroup>
+                            <optgroup label="戶外家具">
+                                <option value="c1">桌子</option>
+                                <option value="c2">椅子</option>
+                                <option value="c3">置物架</option>
+                                <option value="c4">燈具</option>
+                            </optgroup>
+                            <optgroup label="廚房用品">
+                                <option value="d1">爐具</option>
+                                <option value="d2">炊煮用品</option>
+                                <option value="d3" selected>燒烤用品</option>
+                                <option value="d4">餐飲用具</option>
+                                <option value="d5">保冷設備</option>
+                            </optgroup>
+                            <option value="e0">食品</option>
+                        }
+                        else if (Model.CategoryType == "d4")
+                        {
+                            <optgroup label="帳篷">
+                                <option value="a1">寢帳</option>
+                                <option value="a2">客廳</option>
+                                <option value="a3">天幕</option>
+                                <option value="a4">帳篷周邊</option>
+                            </optgroup>
+                            <optgroup label="寢具">
+                                <option value="b1">睡墊/充氣床/行軍床</option>
+                                <option value="b2">睡袋/枕頭/毛毯</option>
+                                <option value="b3">配件</option>
+                            </optgroup>
+                            <optgroup label="戶外家具">
+                                <option value="c1">桌子</option>
+                                <option value="c2">椅子</option>
+                                <option value="c3">置物架</option>
+                                <option value="c4">燈具</option>
+                            </optgroup>
+                            <optgroup label="廚房用品">
+                                <option value="d1">爐具</option>
+                                <option value="d2">炊煮用品</option>
+                                <option value="d3">燒烤用品</option>
+                                <option value="d4" selected>餐飲用具</option>
+                                <option value="d5">保冷設備</option>
+                            </optgroup>
+                            <option value="e0">食品</option>
+                        }
+                        else if (Model.CategoryType == "d5")
+                        {
+                            <optgroup label="帳篷">
+                                <option value="a1">寢帳</option>
+                                <option value="a2">客廳</option>
+                                <option value="a3">天幕</option>
+                                <option value="a4">帳篷周邊</option>
+                            </optgroup>
+                            <optgroup label="寢具">
+                                <option value="b1">睡墊/充氣床/行軍床</option>
+                                <option value="b2">睡袋/枕頭/毛毯</option>
+                                <option value="b3">配件</option>
+                            </optgroup>
+                            <optgroup label="戶外家具">
+                                <option value="c1">桌子</option>
+                                <option value="c2">椅子</option>
+                                <option value="c3">置物架</option>
+                                <option value="c4">燈具</option>
+                            </optgroup>
+                            <optgroup label="廚房用品">
+                                <option value="d1">爐具</option>
+                                <option value="d2">炊煮用品</option>
+                                <option value="d3">燒烤用品</option>
+                                <option value="d4">餐飲用具</option>
+                                <option value="d5" selected>保冷設備</option>
+                            </optgroup>
+                            <option value="e0">食品</option>
+                        }
+                        else
+                        {
+                            <optgroup label="帳篷">
+                                <option value="a1">寢帳</option>
+                                <option value="a2">客廳</option>
+                                <option value="a3">天幕</option>
+                                <option value="a4">帳篷周邊</option>
+                            </optgroup>
+                            <optgroup label="寢具">
+                                <option value="b1">睡墊/充氣床/行軍床</option>
+                                <option value="b2">睡袋/枕頭/毛毯</option>
+                                <option value="b3">配件</option>
+                            </optgroup>
+                            <optgroup label="戶外家具">
+                                <option value="c1">桌子</option>
+                                <option value="c2">椅子</option>
+                                <option value="c3">置物架</option>
+                                <option value="c4">燈具</option>
+                            </optgroup>
+                            <optgroup label="廚房用品">
+                                <option value="d1">爐具</option>
+                                <option value="d2">炊煮用品</option>
+                                <option value="d3">燒烤用品</option>
+                                <option value="d4">餐飲用具</option>
+                                <option value="d5">保冷設備</option>
+                            </optgroup>
+                            <option value="e0" selected>食品</option>
+                        }
+                    }
+
+                </select>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label" for="ProductName">名稱</label>
+                <input class="form-control col-sm-9" type="text" data-val="true" data-val-required="不可空白" id="ProductName" name="ProductName" value="@Model.ProductName" />
+                <label class="col-sm-3 col-form-label"></label>
+                <span class="text-danger field-validation-valid" data-valmsg-for="ProductName" data-valmsg-replace="true"></span>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label" for="ProductDescription">敘述</label>
+                <input class="form-control col-sm-9" type="text" id="ProductDescription" name="ProductDescription" value="@Model.ProductDescription" />
+                <span class="text-danger field-validation-valid" data-valmsg-for="ProductDescription" data-valmsg-replace="true"></span>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label" for="Specification">規格</label>
+                <input class="form-control col-sm-9" type="text" id="Specification" name="Specification" value="@Model.Specification" />
+                <span class="text-danger field-validation-valid" data-valmsg-for="Specification" data-valmsg-replace="true"></span>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label" for="UnitPrice">單價</label>
+                <input class="form-control col-sm-9" type="text" id="UnitPrice" name="UnitPrice" data-val="true" data-val-required="不可空白" data-val-number="應為數字" value="@Model.UnitPrice" />
+                <label class="col-sm-3 col-form-label"></label>
+                <span class="text-danger field-validation-valid fa-pull-right" data-valmsg-for="UnitPrice" data-valmsg-replace="true"></span>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label" for="UnitInStock">庫存</label>
+                <input class="form-control col-sm-9" type="text" id="UnitInStock" name="UnitInStock" data-val="true" data-val-required="不可空白" data-val-number="應為數字" value="@Model.UnitInStock" />
+                <label class="col-sm-3 col-form-label"></label>
+                <span class="text-danger field-validation-valid" data-valmsg-for="UnitInStock" data-valmsg-replace="true"></span>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label" for="Status">商品狀態</label>
+                <select name="Status" class="form-control col-sm-9">
+                    @{if (Model.Status == "01")
+                        {
+                            <option value="01" selected>販賣中</option>
+                            <option value="02">停賣</option>
+                        }
+                        else
+                        {
+                            <option value="01">販賣中</option>
+                            <option value="02" selected>停賣</option>
+                        }
+                    }
+                </select>
+            </div>
+
+            <div class="form-group row">
+                @*<label asp-for="Img" ></label>
+        <input asp-for="Img" accept="image/*"  class="form-control"/>
+        <span asp-validation-for="Img" class="text-danger"> </span>*@
+                <img id="output" src="~/img/ProductsImg/@Img1" style="width: 400px; height: 300px;" class="form-control mt-1" runat="server" />
+                <input type="file" name="ImageFile" accept="image/*" onchange="loadFile(event)" runat="server">
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="確定送出" class="btn btn-primary" runat="server"/>
+                <a href="/Employee/Product" class="btn btn-danger">回到清單</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    var loadFile = function (event) {
+        var output = document.getElementById('output');
+        output.src = URL.createObjectURL(event.target.files[0]);
+        output.onload = function () {
+            URL.revokeObjectURL(output.src) // free memory
+        }
+    };
+</script>
+
+@if (empToastr != "Guest")
+{
+    <script type="text/javascript">
+
+        $(function () {
+
+        Command: toastr["error"]("@empToastr");
+        @{emp.HttpContext.Session.Remove("employeeToastr");}
+
+        toastr.options = {
+            "closeButton": false,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": true,
+            "positionClass": "toast-top-right",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        }
+    })
+    </script>
+}

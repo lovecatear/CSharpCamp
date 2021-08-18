@@ -1,0 +1,169 @@
+﻿@model Prj_CSharpGo.Models.Recipe
+
+@{
+    ViewData["Title"] = "Detail";
+    Layout = "DIDI_Layout";
+}
+
+<!-- Receipe Post Search -->
+@*<div class="receipe-post-search mb-80" style="margin-left: 80px;margin-bottom:60px;margin-top:60px;">
+        <div class="container">
+            <form action="#" method="post">
+                <div class="row">
+                    <div class="col-12 col-lg-3">
+                        <select name="select1" id="select1">
+                            <option value="1">All Receipies Categories</option>
+                            <option value="1">All Receipies Categories 2</option>
+                            <option value="1">All Receipies Categories 3</option>
+                            <option value="1">All Receipies Categories 4</option>
+                            <option value="1">All Receipies Categories 5</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-lg-3">
+                        <select name="select1" id="select2">
+                            <option value="1">All Receipies Categories</option>
+                            <option value="1">All Receipies Categories 2</option>
+                            <option value="1">All Receipies Categories 3</option>
+                            <option value="1">All Receipies Categories 4</option>
+                            <option value="1">All Receipies Categories 5</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-lg-3">
+                        <input type="search" name="search" placeholder="Search Receipies">
+                    </div>
+                    <div class="col-12 col-lg-3 text-right">
+                        <button type="submit" class="btn delicious-btn">Search</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>*@
+<!-- 字型的樣式 -->
+<!-- Load fonts style after rendering the layout styles -->
+<link href="~/css/style.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;500;700;900&display=swap" rel="stylesheet" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" rel="preload" data-rocket-async="style" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+<!--  CSS Files -->
+<link href="~/css/bootstrap.min.css" rel="stylesheet">
+<link href="~/css/bootstrap-icons.css" rel="stylesheet">
+<!-- Template Main CSS File -->
+@*<link href="~/Didi/css/fontawesome.css" rel="stylesheet" >*@
+<link href="~/css/janecamp.css" rel="stylesheet">
+<link href="~/css/janecampindex.css" rel="stylesheet">
+<link href="~/css/janecampreserveindex.css" rel="stylesheet">
+<link href="~/css/Search.css" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+@*<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>*@
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+<!-- JavaScript Bundle with Popper -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<!-- Template Main JS File -->
+<script src="~/js/main.js"></script>
+
+
+<script src="~/Didi/js/jquery-1.11.0.min.js"></script>
+<script src="~/Didi/js/jquery-migrate-1.2.1.min.js"></script>
+<script src="~/Didi/js/bootstrap.bundle.min.js"></script>
+<script src="~/Didi/js/templatemo.js"></script>
+<script src="~/Didi/js/custom.js"></script>
+
+<link rel="stylesheet" href="~/Didi/css/recipe.css?v=0.1">
+
+<!-- Receipe Slider -->
+<div class="container" style="text-align: center; margin-top: 50px;">
+    <img src="~/Didi/img/@Model.Img" style="max-width: 500px; max-height: 700px ;border: 15px orange double;" />
+</div>
+
+<!-- Receipe Content Area -->
+<div class="receipe-content-area">
+    <div class="container">
+        <div class="row" style="margin-top:50px;">
+            <div class="col-12 col-md-10 " style="padding-left: 170px">
+                <span class="re_font">@Model.PublishTime</span>
+                <h2 class="re_font">@Model.RecipeName</h2>
+                <div class="receipe-duration">
+                    <h6 class="re_font">準備時間: @Model.PreparationTime 分鐘</h6>
+                    <h6 class="re_font">烹煮時間: @Model.CookingTime 分鐘</h6>
+                    <h6 class="re_font">份量: @Model.Yield 人份</h6>
+                </div>
+            </div>
+            @*<div class="col-12 col-md-2">
+                    <div class="receipe-ratings text-right my-5">
+                        <div class="ratings">
+                            <i class="fa fa-star" aria-hidden="true"></i>
+                            <i class="fa fa-star" aria-hidden="true"></i>
+                            <i class="fa fa-star" aria-hidden="true"></i>
+                            <i class="fa fa-star" aria-hidden="true"></i>
+                            <i class="fa fa-star-o" aria-hidden="true"></i>
+                        </div>
+                        <a href="#" class="btn delicious-btn">For Begginers</a>
+                    </div>
+                </div>*@
+            <div class="col-12 col-md-2">
+                @* 修改&刪除 *@
+                <a class="btn btn-success bi bi-pencil-square" href="/Recipe/Edit/@Model.RecipeId" style="font-size:35px"></a>
+                @Html.ActionLink("", "delete", new { id = Model.RecipeId }, new { @class = "btn btn-success bi bi-trash btnc", @style = "font-size:35px;margin-left:10px;background-color:red;", @onclick = "return Confirm_Form()" })
+            </div>
+        </div>
+        <div class="single-preparation-step" style="padding-left: 160px; ">
+            <div class="row">
+                <div class="col-md-8">
+                    @*<p>
+                            <h3 class="re_font">需準備食材:</h3>
+                        </p>*@
+                    <p>
+                        <h3 class="re_font">01.備料</h3>
+                    </p>
+                    <a class="re_fonts">@Html.Raw(Model.Preparation.Replace(Environment.NewLine, "<br/>"))</a>
+                    <p>
+                        <h3 class="re_font">02.烹煮步驟</h3>
+                    </p>
+                    <a class="re_fonts">@Html.Raw(Model.Step.Replace(Environment.NewLine, "<br/>"))</a>
+                </div>
+                <div class="col-md-4">
+                    <p>
+                        <h3 class="re_font">推薦商品</h3>
+                    </p>
+                    @foreach (var ass in ViewData["Association"] as List<Association>)
+                    {
+                        @foreach (var pro in ViewData["Product"] as List<Product>)
+                        {
+                            @foreach (var img in ViewData["productimg"] as List<ProductImg>)
+                            {
+                                if (ass.ProductId == img.ProductId)
+                                {
+                                    if (Model.RecipeId == ass.RecipeId)
+                                    {
+                                        if (ass.ProductId == pro.ProductId)
+                                        {
+                                            <a href="/CampProducts/ProductDetail?productid=@pro.ProductId">
+                                                <img src="~/img/ProductsImg/@img.Img" style="max-width: 100px;max-height: 100px" />
+                                            </a>
+                                            <a href="/CampProducts/ProductDetail?productid=@pro.ProductId">
+                                                @pro.ProductName/@pro.ProductDescription
+                                            </a><br>
+                                        }
+                                    }
+                                }
+
+                            }
+                        }
+                    }
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        function Confirm_Form() {
+            if (!confirm("您確定要刪除嗎?"))
+                return false;
+        }
+    </script>
+}

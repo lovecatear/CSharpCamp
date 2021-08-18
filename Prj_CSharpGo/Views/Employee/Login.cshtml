@@ -1,0 +1,134 @@
+﻿@using Microsoft.AspNetCore.Http
+
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor emp
+
+@{
+    string empToastr = emp.HttpContext.Session.GetString("employeeToastr") ?? "Guest";
+}
+
+@{
+    ViewData["Title"] = "登入";
+    Layout = "EmployeeLayout";
+}
+
+<link href="~/css/emplayout.css?v=0.1" rel="stylesheet" />
+
+<h1 class="title_font">員工登入</h1>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post" action="/Employee/Login">
+
+            @Html.AntiForgeryToken()
+
+            <div class="form-group">
+                <label class="control-label bar_font " for="EmployeeEmail">Email</label>
+                <input class="form-control la_font" type="email" data-val="true" data-val-email="請輸入正確格式 example@mail.com" data-val-required="Email不可空白" id="EmployeeEmail" name="EmployeeEmail" value="" />
+                <label class="col-sm-3 col-form-label"></label>
+                <span class="text-danger field-validation-valid" data-valmsg-for="EmployeeEmail" data-valmsg-replace="true"></span>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label bar_font" for="EmployeePassword">密碼</label>
+                <input class="form-control la_font" type="password" data-val="true" data-val-required="密碼不可空白" id="EmployeePassword" name="EmployeePassword" value="" />
+                <label class="col-sm-3 col-form-label"></label>
+                <span class="text-danger " data-valmsg-for="EmployeePassword" data-valmsg-replace="true"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="確定" class="btn btn-primary bar_font" />
+                <a href="/Home/Index" class="btn btn-danger bar_font">取消</a>
+            </div>
+
+
+
+                <div class="form-group d-inline">
+                    <button id="nowGive1" type="button" class="btn btn-light border border-0">.</button>
+                </div>
+                <span>&emsp;</span>
+                <div class="form-group d-inline">
+                    <button id="nowGive2" type="button" class="btn btn-light border border-0">.</button>
+                </div>                
+                <span>&emsp;</span>
+                <div class="form-group d-inline">
+                    <button id="nowGive3" type="button" class="btn btn-light border border-0">點選後自動輸入帳號密碼</button>
+                </div>
+
+
+        </form>
+    </div>
+</div>
+
+@if (empToastr == "登出成功")
+{
+    <script type="text/javascript">
+
+        $(function () {
+
+        Command: toastr["success"]("@empToastr");
+        @{emp.HttpContext.Session.Remove("employeeToastr");}
+
+        toastr.options = {
+            "closeButton": false,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": true,
+            "positionClass": "toast-top-right",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        }
+    })
+    </script>
+}
+else if (empToastr != "Guest")
+{
+    <script type="text/javascript">
+
+        $(function () {
+
+        Command: toastr["error"]("@empToastr");
+        @{emp.HttpContext.Session.Remove("employeeToastr");}
+
+        toastr.options = {
+            "closeButton": false,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": true,
+            "positionClass": "toast-top-right",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        }
+    })
+    </script>
+}
+
+<!-- 帶資料的隱藏按鈕 -->
+<script>
+    $("#nowGive1").click(function (event) {
+        $("#EmployeeEmail").val("employee2008@mail.com");
+        $("#EmployeePassword").val("employee");
+    });
+    $("#nowGive2").click(function (event) {
+        $("#EmployeeEmail").val("employee2008@mail.com");
+        $("#EmployeePassword").val("employee2008");
+    });
+    $("#nowGive3").click(function (event) {
+        $("#EmployeeEmail").val("employee1001@mail.com");
+        $("#EmployeePassword").val("employee1001");
+    });
+</script>

@@ -1,0 +1,256 @@
+﻿@using Prj_CSharpGo.Models.ViewModels
+
+@model RecipeProduct
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "EmployeeLayout";
+}
+
+<!-- 字型的樣式 -->
+<!-- Load fonts style after rendering the layout styles -->
+<link href="~/css/style.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;500;700;900&display=swap" rel="stylesheet" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" rel="preload" data-rocket-async="style" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+<!--  CSS Files -->
+<link href="~/css/bootstrap.min.css" rel="stylesheet">
+<link href="~/css/bootstrap-icons.css" rel="stylesheet">
+<!-- Template Main CSS File -->
+@*<link href="~/Didi/css/fontawesome.css" rel="stylesheet" >*@
+<link href="~/css/janecamp.css" rel="stylesheet">
+<link href="~/css/janecampindex.css" rel="stylesheet">
+<link href="~/css/janecampreserveindex.css" rel="stylesheet">
+<link href="~/css/Search.css" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+@*<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>*@
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+<!-- JavaScript Bundle with Popper -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<!-- Template Main JS File -->
+<script src="~/js/main.js"></script>
+
+
+<script src="~/Didi/js/jquery-1.11.0.min.js"></script>
+<script src="~/Didi/js/jquery-migrate-1.2.1.min.js"></script>
+<script src="~/Didi/js/bootstrap.bundle.min.js"></script>
+<script src="~/Didi/js/templatemo.js"></script>
+<script src="~/Didi/js/custom.js"></script>
+
+<link rel="stylesheet" href="~/Didi/css/recipe.css">
+
+@*Start Contact*@
+<div class="container py-5">
+    <div class="row py-5">
+        <form class="col-md-9 m-auto" method="post" action="/Recipe/Edit" data-ajax='false' enctype="multipart/form-data">
+            <input type="text" name="RecipeId" value="@Model.Recipe.RecipeId" hidden>
+            @*上傳圖片 JS在最下面*@
+            <div style="text-align:center" class=" inputimg">
+                <img id="output" style="max-width: 400px; max-height: 400px; display: block; margin: auto; " class="mt-1" src="~/Didi/img/@Model.Recipe.Img" />
+                <input type="file" name="Img" accept="image/*" onchange="loadFile(event)" style="margin-top:10px;">
+            </div>
+            @*上傳圖片*@
+            <div class="row">
+                <div class="form-group col-md-6 mb-3">
+                    <label for="inputname">食譜名稱RecipeName</label>
+                    <input type="text" class="form-control mt-1" name="RecipeName" value="@Model.Recipe.RecipeName">
+                </div>
+                <div class="form-group col-md-6 mb-3">
+                    <label for="inputemail">創建時間CreateDate</label>
+                    <input type="text" class="form-control mt-1" name="CreateTime" value="@Model.Recipe.CreateTime">
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-6 mb-3">
+                    <label for="inputsubject">準備時間時間PreparationTime</label>
+                    <input type="text" class="form-control mt-1" name="PreparationTime" value="@Model.Recipe.PreparationTime">
+                </div>
+                <div class="form-group col-md-6 mb-3">
+                    <label for="inputsubject">料理時間Cooking time</label>
+                    <input type="text" class="form-control mt-1" name="CookingTime" value="@Model.Recipe.CookingTime">
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-6 mb-3">
+                    <label for="inputsubject">份量Yield</label>
+                    <input type="text" class="form-control mt-1" name="Yield" value="@Model.Recipe.Yield">
+                </div>
+            </div>
+            @*新增食材*@
+            <div class="row">
+                <div class="col-md-2" style="float:left">
+                    <button id="ass_add" type="button" class="bi bi-plus form-control mt-1" style="font-size:20px">  新增食材</button>
+                </div>
+            </div>
+            @*食材清單*@
+            <div id="ass_area">
+                @* 如果沒有對應的Associations給他一個與新增相同的預設 *@
+                @if (Model.Associations.Count() > 0)
+                {
+                    var index = 0;
+                    foreach (var ass in Model.Associations)
+                    {
+                        <div class="row" id="row_@index">
+                            <input type="text" class="form-control mt-1" name="Description[@index].Key" value="@index" hidden>
+                            <input type="text" class="form-control mt-1" name="ProductID[@index].Key" value="@index" hidden>
+                            <div class="form-group col-md-6 mb-3">
+                                <label for="inputsubject">FOOD_Description</label>
+                                <div class="row">
+                                    @*<div class="col-md-2" style="float:left">
+                                            <button id="ass_add" type="button" class="bi bi-plus form-control mt-1"></button>
+                                        </div>*@
+                                    <div class="col-md-12">
+                                        <input type="text" class="form-control mt-1" name="Description[@index].Value" value="@ass.Description" placeholder="Description">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6 mb-3">
+                                <label for="inputsubject">Product</label>
+                                <div class="=row">
+                                    <div class="col-md-8">
+                                        <select class="form-control mt-1" name="ProductID[@index].Value" style="float: left;">
+                                            <option value="0">食材選擇</option>
+                                            @* 這邊無法用2次Model去foreach，所以用ViewData取代(controller也要寫) *@
+                                            @{ foreach (var pro in ViewData["Products"] as List<Product>)
+                                                {
+                                                    @* 比對Associations.ProductId是否與Product.ProductId相同=>相同預設選取 *@
+                                                    if (ass.ProductId == pro.ProductId)
+                                                    {
+                                                        <option value="@pro.ProductId" selected>@pro.ProductName </option>
+                                                    }
+                                                    else
+                                                    {
+                                                        <option value="@pro.ProductId">@pro.ProductName </option>
+                                                    }
+
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                    @* 刪除 *@
+                                    <div class="col-md-2" style="float: left;margin-left:5px;">
+                                        <button type="button" class="form-control mt-1" onclick="del_row(this)" data-id="@index">Del</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        index++;
+                    }
+                }
+                else
+                {
+                    <div class="row" id="row_0">
+                        <div class="form-group col-md-6 mb-3">
+                            <label for="inputsubject">FOOD_Description</label>
+                            <input type="text" class="form-control mt-1" name="Description[0].Value" placeholder="Description">
+                        </div>
+                        <div class="form-group col-md-6 mb-3">
+                            <label for="inputsubject">Product</label>
+                            <div class="=row">
+                                <div class="col-md-8">
+                                    <select class="form-control mt-1" style="float: left;" name="ProductID[0].Value">
+                                        <option value="0">食材選擇</option>
+                                        @{ foreach (var item in Model.Products)
+                                            {
+                                                <option value="@item.ProductId">@item.ProductName </option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-md-2" style="float: left;margin-left:5px;">
+                                    <button type="button" class="form-control mt-1" onclick="del_row(this)" data-id="0">Del</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+            </div>
+            <div class="mb-3">
+                <label for="inputmessage">01.備料Preparation</label>
+                <textarea class="form-control mt-1" name="Preparation" rows="8">@Model.Recipe.Preparation</textarea>
+            </div>
+            <div class="mb-3">
+                <label for="inputmessage">02.烹煮步驟Step</label>
+                <textarea class="form-control mt-1" name="Step" rows="8">@Model.Recipe.Step</textarea>
+            </div>
+            <div class="row">
+                <div class="col text-end mt-2">
+                    <button type="submit" class="btn btn-success btn-lg px-3">Send</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@* select option，給js使用新增項目 *@
+<select id="porduct_select_area" hidden>
+    <option value="0">食材選擇</option>
+    @{
+        foreach (var item in Model.Products)
+        {
+            <option value="@item.ProductId">@item.ProductName </option>
+        }
+    }
+</select>
+@*End Contact*@
+
+
+
+@section Scripts {
+    <script>
+        var loadFile = function (event) {
+            var output = document.getElementById('output');
+            output.src = URL.createObjectURL(event.target.files[0]);
+            output.onload = function () {
+                URL.revokeObjectURL(output.src) // free memory
+            }
+        };
+        $('#fast_input').on('click', function () {
+            $("input[name='RecipeName']").val('法式水果吐司2');
+            $("input[name='CreateTime']").val('2021/8/9 上午 12:00:00');
+            $("input[name='PreparationTime']").val('10');
+            $("input[name='CookingTime']").val('10');
+            $("input[name='Yield']").val('2');
+            $("textarea[name='Preparation']").text('厚片吐司2片(或一般吐司5片)。\n鮮奶250cc。 雞蛋3個。\n藍莓、桑葚或是自己喜歡的水果。\n 糖粉or砂糖適量or蜂蜜、糖漿。');
+            $("textarea[name='Step']").val('鮮奶和雞蛋混合拌勻。\n厚片吐司切9宮格，一般吐司斜角對切。\n放進鮮奶中浸泡約10分鐘。\n熱鍋中小火，放入奶油或是沙拉油皆可。\n將浸泡好的吐司，一個一個放入煎鍋煎熟，每一面皆金黃色。\n起鍋擺盤，再灑上糖粉或是淋上蜂蜜糖漿。\n簡單又吸睛的法式吐司完成。');
+        })
+
+        // ASS_ADD
+        $('#ass_add').on('click', function () {
+            console.log('114');
+            // 計算現在有多少row
+            var row_num = $('#ass_area').children('.row').length;
+            var html = "";
+            var option_html = $("#porduct_select_area").html();
+
+            html += '<div class="row" id="row_' + row_num + '">';
+            html += '<input type="text" class="form-control mt-1" name="Description[' + row_num + '].Key" value="' + row_num + '" hidden>';
+            html += '<input type="text" class="form-control mt-1" name="ProductID[' + row_num + '].Key" value="' + row_num + '" hidden>';
+            html += '<div class="form-group col-md-6 mb-3" >';
+            html += '<label for= "inputsubject" > FOOD_Description</label >';
+            html += '<input type = "text" class="form-control mt-1" name = "Description[' + row_num + '].Value" placeholder = "Description" >';
+            html += '</div>';
+            html += '<div class="form-group col-md-6 mb-3" >';
+            html += '<label for= "inputsubject" > Product</label >';
+            html += '<div class="row">';
+            html += '<div class="col-md-8"><select class="form-control mt-1 style="float: left;"" name = "ProductID[' + row_num + '].Value" >';
+            html += option_html;
+            html += '</select> ';
+            html += '</div>';
+            html += '<div class="col-md-2" style=" float: left;margin-left:5px;"><button type="button"class="form-control mt-1" onclick="del_row(this)" data-id="' + row_num + '">Del</button></div>';
+            html += '</div>';
+            html += '</div>';
+            console.log(html);
+            $('#ass_area').append(html);
+        });
+
+        function del_row(obj) {
+            var row_num = $(obj).data('id');
+            $("#row_" + row_num).remove();
+        }
+    </script>
+}
